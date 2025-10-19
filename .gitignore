@@ -1,0 +1,19 @@
+﻿# Build
+bin/
+obj/
+out/
+
+# Config
+appsettings.*.json
+.env
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Sistema
+Thumbs.db
+*.log
+*.tmp
