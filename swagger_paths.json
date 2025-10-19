@@ -1,0 +1,139 @@
+﻿{
+  "/api/Deliverers/{id}/cnh": {
+    "put": {
+      "tags": [
+        "Deliverers"
+      ],
+      "parameters": [
+        "@{name=id; in=path; required=True; schema=}"
+      ],
+      "requestBody": {
+        "content": "@{multipart/form-data=}"
+      },
+      "responses": {
+        "200": "@{description=OK}"
+      }
+    }
+  },
+  "/api/Motos": {
+    "get": {
+      "tags": [
+        "Motos"
+      ],
+      "responses": {
+        "200": "@{description=OK; content=}"
+      }
+    },
+    "post": {
+      "tags": [
+        "Motos"
+      ],
+      "requestBody": {
+        "content": "@{application/json=; text/json=; application/*+json=}"
+      },
+      "responses": {
+        "200": "@{description=OK}"
+      }
+    }
+  },
+  "/api/Motos/{id}": {
+    "get": {
+      "tags": [
+        "Motos"
+      ],
+      "parameters": [
+        "@{name=id; in=path; required=True; schema=}"
+      ],
+      "responses": {
+        "200": "@{description=OK}"
+      }
+    },
+    "put": {
+      "tags": [
+        "Motos"
+      ],
+      "parameters": [
+        "@{name=id; in=path; required=True; schema=}"
+      ],
+      "requestBody": {
+        "content": "@{application/json=; text/json=; application/*+json=}"
+      },
+      "responses": {
+        "200": "@{description=OK}"
+      }
+    },
+    "delete": {
+      "tags": [
+        "Motos"
+      ],
+      "parameters": [
+        "@{name=id; in=path; required=True; schema=}"
+      ],
+      "responses": {
+        "200": "@{description=OK}"
+      }
+    }
+  },
+  "/debug/deliverers": {
+    "get": {
+      "tags": [
+        "Mottu.Backend"
+      ],
+      "responses": {
+        "200": "@{description=OK; content=}"
+      }
+    }
+  },
+  "/debug/rentals": {
+    "get": {
+      "tags": [
+        "Mottu.Backend"
+      ],
+      "responses": {
+        "200": "@{description=OK; content=}"
+      }
+    }
+  },
+  "/api/Rentals": {
+    "post": {
+      "tags": [
+        "Rentals"
+      ],
+      "requestBody": {
+        "content": "@{application/json=; text/json=; application/*+json=}"
+      },
+      "responses": {
+        "200": "@{description=OK}"
+      }
+    }
+  },
+  "/api/Rentals/{id}": {
+    "get": {
+      "tags": [
+        "Rentals"
+      ],
+      "parameters": [
+        "@{name=id; in=path; required=True; schema=}"
+      ],
+      "responses": {
+        "200": "@{description=OK}"
+      }
+    }
+  },
+  "/api/Rentals/{id}/return": {
+    "put": {
+      "tags": [
+        "Rentals"
+      ],
+      "parameters": [
+        "@{name=id; in=path; required=True; schema=}"
+      ],
+      "requestBody": {
+        "content": "@{application/json=; text/json=; application/*+json=}"
+      },
+      "responses": {
+        "200": "@{description=OK}"
+      }
+    }
+  }
+}

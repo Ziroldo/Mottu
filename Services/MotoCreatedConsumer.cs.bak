@@ -1,0 +1,76 @@
+using System.Text;\nusing RabbitMQ.Client;\nusing RabbitMQ.Client;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using Mottu.Backend.Data;
+using Mottu.Backend.Models;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+
+namespace Mottu.Backend.Services
+{
+    public class MotoCreatedConsumer : BackgroundService
+    {
+        private readonly IServiceScopeFactory _scopeFactory;
+        private IConnection _connection;
+        private IModel _channel;
+
+        public MotoCreatedConsumer(IServiceScopeFactory scopeFactory)
+        {
+            _scopeFactory = scopeFactory;
+
+            var factory = new ConnectionFactory
+            {
+                HostName = "localhost",
+                Port = 5672,
+                UserName = "guest",
+                Password = "guest"
+            };
+
+            _connection = factory.CreateConnection();
+            _channel = _connection.CreateModel();
+            _channel.QueueDeclare(queue: "moto_created", durable: true, exclusive: false, autoDelete: false);
+        }
+
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            var consumer = new EventingBasicConsumer(_channel);
+            consumer.Received += async (model, ea) =>
+            {
+                try
+                {
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+
+                    // tenta desserializar o JSON recebido
+                    var moto = JsonSerializer.Deserialize<Moto>(message);
+                    if (moto is null) return;
+
+                    // só grava no banco se for do ano 2024
+                    if (moto.Ano == 2024)
+                    {
+                        using var scope = _scopeFactory.CreateScope();
+                        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+                        db.Motos.Add(moto);
+                        await db.SaveChangesAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[Consumer Error] {ex.Message}");
+                }
+            };
+
+            _channel.BasicConsume(queue: "moto_created", autoAck: true, consumer: consumer);
+            return Task.CompletedTask;
+        }
+
+        public override void Dispose()
+        {
+            _channel.Close();
+            _connection.Close();
+            base.Dispose();
+        }
+    }
+}
+
